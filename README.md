@@ -1,8 +1,7 @@
 # Bringing up the ELK services
 
-To prove and solve Logit event loss, we need ES and LS services to write to.
-We'll start with LS, and if we can't observe event loss, we'll put a TCP proxy
-in front of it with a 50s client timeout (which is what Logit does).
+This docker compose graph provides a Logstash TCP input with optional TCP proxy that aggressively times clients out,
+to simulate Logit's behaviour.
 
 * Requires `sudo sysctl -w vm.max_map_count=262144` at minimum.
 * Bring up the stack: `docker-compose up`.  This takes a long time.
@@ -27,3 +26,8 @@ in front of it with a 50s client timeout (which is what Logit does).
   * Select `@timestamp` under `Time Filter field name`
   * Click `Create index pattern`
 * Now browse Kibana Discover to verify that you can see your dummy entry: http://localhost:5601/app/kibana#/discover
+
+You can now start logging to `localhost:16500` to observe the behaviour of the logger when Logstash does not drop connections,
+or to `localhost:16600` to observe the behaviour of the logger when an aggressive proxy is in front of Logstash (as is the case
+with Logit). Logger writes that occur more than 30 seconds since the last successful write will be lost to an `Errno::EPIPE`
+exception.
