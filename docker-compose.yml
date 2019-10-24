@@ -1,8 +1,27 @@
-elk:
-  image: sebp/elk
-  ports:
-    - "5601:5601"
-    - "9200:9200"
-    - "5044:5044"
-  environment:
-    ES_CONNECT_RETRY: 120
+version: '2.1'
+
+services:
+  elk:
+    image: sebp/elk
+    ports:
+      - "5601:5601"
+      - "9200:9200"
+      - "5044:5044"
+      - "16500:16500"
+    environment:
+      ES_CONNECT_RETRY: 120
+    volumes:
+      - elk:/var/lib/elasticsearch
+      - ./02-tcp-input.conf:/etc/logstash/conf.d/02-tcp-input.conf
+      - ./30-output.conf:/etc/logstash/conf.d/30-output.conf
+    networks:
+      - elknet
+
+volumes:
+  elk:
+
+networks:
+  elknet:
+    driver: bridge
+    ipam:
+      driver: default

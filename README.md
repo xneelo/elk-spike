@@ -1,5 +1,13 @@
+# Bringing up the ELK services
+
+To prove and solve Logit event loss, we need ES and LS services to write to.
+We'll start with LS, and if we can't observe event loss, we'll put a TCP proxy
+in front of it with a 50s client timeout (which is what Logit does).
+
 * Requires `sudo sysctl -w vm.max_map_count=262144` at minimum.
-* Bring up the stack: `docker-compose up`.
+* Bring up the stack: `docker-compose up`.  This takes a long time.
+  You'll know it's done when you can visit Kibana without a timeout or
+  error message: http://localhost:5601
 * To verify that your stack came up, exec into the `elk` container and create a dummy log message: ```
   $ docker-compose exec elk /bin/bash
   root@f5b68a55f6d8:/# /opt/logstash/bin/logstash \
