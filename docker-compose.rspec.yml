@@ -1,15 +1,25 @@
 version: '2.1'
 
 services:
-  rspec:
+  test: &default-test
     build: .
     environment:
-      LOGSTASH_URI: "tcp://haproxy:16700"
+      LOGSTASH_URI: "tcp://elk:16500"
       SEARCH_URI: "http://elk:9200/_search"
     volumes:
       - ./spec:/usr/src/app/spec
     networks:
       - elknet
+  test-timeouts:
+    <<: *default-test
+    environment:
+      LOGSTASH_URI: "tcp://haproxy:16700"
+      SEARCH_URI: "http://elk:9200/_search"
+  test-keepalives:
+    <<: *default-test
+    environment:
+      LOGSTASH_URI: "tcp://haproxy:16800"
+      SEARCH_URI: "http://elk:9200/_search"
 
 networks:
   elknet:

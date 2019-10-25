@@ -1,0 +1,21 @@
+version: '2.1'
+
+services:
+  haproxy:
+    image: haproxy
+    ports:
+      - "16700:16700"
+      - "16800:16800"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    networks:
+      - elknet
+
+volumes:
+  elk:
+
+networks:
+  elknet:
+    driver: bridge
+    ipam:
+      driver: default

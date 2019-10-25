@@ -16,15 +16,6 @@ services:
       - ./30-output.conf:/etc/logstash/conf.d/30-output.conf
     networks:
       - elknet
-  haproxy:
-    image: haproxy
-    ports:
-      - "16700:16700"
-      - "16800:16800"
-    volumes:
-      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
-    networks:
-      - elknet
 
 volumes:
   elk:
