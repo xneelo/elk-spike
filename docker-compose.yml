@@ -16,15 +16,13 @@ services:
       - ./30-output.conf:/etc/logstash/conf.d/30-output.conf
     networks:
       - elknet
-  tcp-proxy:
-    image: tecnativa/tcp-proxy
+  haproxy:
+    image: haproxy
     ports:
-      - "16600:16600"
-    environment:
-      LISTEN: ":16600"
-      TALK: "elk:16500"
-      TIMEOUT_CLIENT: 10
-      TIMEOUT_CLIENT_FIN: 5
+      - "16700:16700"
+      - "16800:16800"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
     networks:
       - elknet
 

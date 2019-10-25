@@ -1,0 +1,18 @@
+version: '2.1'
+
+services:
+  rspec:
+    build: .
+    environment:
+      LOGSTASH_URI: "tcp://haproxy:16700"
+      SEARCH_URI: "http://elk:9200/_search"
+    volumes:
+      - ./spec:/usr/src/app/spec
+    networks:
+      - elknet
+
+networks:
+  elknet:
+    driver: bridge
+    ipam:
+      driver: default
